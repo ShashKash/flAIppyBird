@@ -45,14 +45,12 @@ function NeuralNetwok() {
     const output = model.predict(inputData).dataSync();
 
     //Add normalization to the output.
-    var jumpPrediction = output[0];
-    var noJumpPrediction = output[1];
-    jumpPrediction = jumpPrediction/(jumpPrediction + noJumpPrediction);
-    noJumpPrediction = noJumpPrediction/(jumpPrediction + noJumpPrediction);
+    var jumpPrediction = output[0]/(output[0] + output[1]);
+    var noJumpPrediction = output[1]/(output[0] + output[1]);
     const normOut = [jumpPrediction, noJumpPrediction];
 
     //testing the outputs
-    print(normOut);
+    //print(normOut);
 
     return normOut;
   }

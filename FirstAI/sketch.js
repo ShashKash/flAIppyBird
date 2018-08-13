@@ -1,6 +1,5 @@
 var bird;
 var pipes = [];
-var prediction;
 
 function setup() {
   createCanvas(640, 480);
@@ -12,15 +11,10 @@ function setup() {
 function draw() {
   background(0);
 
-  prediction = bird.brain.forward([ bird.y, bird.velocity,
-                      bird.nearestPipe(pipes).distFromBird(bird),
-                      bird.nearestPipe(pipes).HoleUp, bird.nearestPipe(pipes).HoleSize ]);
+
   bird.update();
   bird.show();
-
-  if(prediction[0]>0.5) {
-    bird.jump();
-  }
+  bird.flywithAI(pipes);
 
   if(frameCount % 80 == 0) {
     pipes.push(new Pipe());
@@ -38,10 +32,6 @@ function draw() {
         pipes.splice(i, 1);
       }
   }
-
-  // if(bird.decision[0] >= 0.5) {
-  //   bird.jump();
-  // }
 
 }
 

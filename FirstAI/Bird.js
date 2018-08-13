@@ -24,6 +24,11 @@ function Bird() {
       this.y = height;
       this.velocity = 0;
     }
+
+    if(this.y < 0) {
+      this.y = 0;
+      this.velocity = 0;
+    }
   }
 
   this.jump = function() {
@@ -46,6 +51,21 @@ function Bird() {
       }
     }
     return pipes[pipeIndex];
+  }
+
+  this.flywithAI = function(pipes) {
+
+    var prediction = this.brain.forward([ this.y, this.velocity,
+                        this.nearestPipe(pipes).distFromBird(this),
+                        this.nearestPipe(pipes).HoleUp, this.nearestPipe(pipes).HoleSize ]);
+
+    print(prediction);
+    print(prediction[0]+prediction[1]);
+
+    if(prediction[0] > 0.5) {
+      bird.jump();
+    }
+
   }
 
 }
