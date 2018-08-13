@@ -41,8 +41,20 @@ function NeuralNetwok() {
 
   this.forward = function(inputs) {
     const inputData = tf.tensor2d(inputs, [1,this.inputNodes]);
-    model.predict(inputData).print();
-    // return output;
+    //model.predict(inputData).print();
+    const output = model.predict(inputData).dataSync();
+
+    //Add normalization to the output.
+    var jumpPrediction = output[0];
+    var noJumpPrediction = output[1];
+    jumpPrediction = jumpPrediction/(jumpPrediction + noJumpPrediction);
+    noJumpPrediction = noJumpPrediction/(jumpPrediction + noJumpPrediction);
+    const normOut = [jumpPrediction, noJumpPrediction];
+
+    //testing the outputs
+    print(normOut);
+
+    return normOut;
   }
 
   //Copy the neural net

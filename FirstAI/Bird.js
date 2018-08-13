@@ -5,7 +5,7 @@ function Bird() {
   this.gravity = 0.5;
   this.velocity = 0;
 
-  this.brain = new NeuralNetwok(3,3,2);
+  this.brain = new NeuralNetwok(3,5,2);
   this.brain.initializeLayers();
 
   // this.decision = [0,0];
@@ -36,14 +36,16 @@ function Bird() {
 
   this.nearestPipe = function(pipes) {
     var minDist = width;
+    var pipeIndex = 0;
     var dist = width;
     for(var i=0; i < pipes.length; i++) {
       dist = pipes[i].x - this.x;
       if(dist < minDist) {
         minDist = dist;
+        pipeIndex = i;
       }
     }
-    return minDist;
+    return pipes[pipeIndex];
   }
 
 }

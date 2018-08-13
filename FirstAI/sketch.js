@@ -1,18 +1,26 @@
 var bird;
 var pipes = [];
+var prediction;
 
 function setup() {
   createCanvas(640, 480);
   bird = new Bird();
   pipes.push(new Pipe());
+  prediction = [0,0];
 }
 
 function draw() {
   background(0);
 
-  bird.brain.forward([bird.y, bird.velocity, bird.nearestPipe(pipes)]);
+  prediction = bird.brain.forward([ bird.y, bird.velocity,
+                      bird.nearestPipe(pipes).distFromBird(bird),
+                      bird.nearestPipe(pipes).HoleUp, bird.nearestPipe(pipes).HoleSize ]);
   bird.update();
   bird.show();
+
+  if(prediction[0]>0.5) {
+    bird.jump();
+  }
 
   if(frameCount % 80 == 0) {
     pipes.push(new Pipe());
@@ -37,8 +45,8 @@ function draw() {
 
 }
 
-function keyPressed() {
-  if(key == ' '){
-    bird.jump();
-  }
-}
+// function keyPressed() {
+//   if(key == ' '){
+//     bird.jump();
+//   }
+// }

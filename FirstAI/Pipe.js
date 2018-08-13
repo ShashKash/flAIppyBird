@@ -31,4 +31,9 @@ function Pipe() {
     }
   }
 
+  this.distFromBird = function(bird) {
+    var Dist = this.x - bird.x;
+    return Dist;
+  }
+
 }
