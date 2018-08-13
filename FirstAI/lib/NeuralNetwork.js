@@ -26,17 +26,19 @@ function NeuralNetwok() {
     model.add(tf.layers.dense({
       inputShape: [this.inputNodes],
       activation: "sigmoid",
-      units: 6,
+      units: 5,
       kernelInitializer: 'randomNormal',
       biasInitializer: 'randomNormal',
     }))
     model.add(tf.layers.dense({
-      inputShape: [6],
+      inputShape: [4],
       activation: "sigmoid",
       units: this.outputNodes,
       kernelInitializer: 'randomNormal',
       biasInitializer: 'randomNormal'
     }))
+    //print(model.getWeights()[0].data().toString());
+    //print(model);
   }
 
   this.forward = function(inputs) {

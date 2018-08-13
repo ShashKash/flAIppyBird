@@ -8,14 +8,18 @@ function Bird() {
   this.brain = new NeuralNetwok(3,5,2);
   this.brain.initializeLayers();
 
-  // this.decision = [0,0];
+  this.score = 0;
+  this.fitness = 0;
 
   this.show = function() {
-    fill(255);
+    stroke(255);
+    fill(255, 50);
     ellipse(this.x, this.y, 32, 32);
   }
 
   this.update = function() {
+    this.score++;
+
     this.y += this.velocity;
     this.velocity += this.gravity;
     this.velocity *= 0.95;
@@ -45,25 +49,29 @@ function Bird() {
     var dist = width;
     for(var i=0; i < pipes.length; i++) {
       dist = pipes[i].x - this.x;
-      if(dist < minDist) {
+      if(dist < minDist && dist >= 0) {
         minDist = dist;
         pipeIndex = i;
       }
     }
+    //little testing
+    //print(minDist);
     return pipes[pipeIndex];
   }
 
   this.flywithAI = function(pipes) {
 
-    var prediction = this.brain.forward([ this.y, this.velocity,
-                        this.nearestPipe(pipes).distFromBird(this),
-                        this.nearestPipe(pipes).HoleUp, this.nearestPipe(pipes).HoleSize ]);
+    var inputs = [ this.y/height , this.velocity/10 ,
+                        this.nearestPipe(pipes).distFromBird(this)/width ,
+                        this.nearestPipe(pipes).HoleUp/height , this.nearestPipe(pipes).HoleSize/height ];
 
-    print(prediction);
-    print(prediction[0]+prediction[1]);
+    var prediction = this.brain.forward(inputs);
 
-    if(prediction[0] > 0.5) {
-      bird.jump();
+    //print(prediction);
+    //print(prediction[0]+prediction[1]);
+
+    if(prediction[0] > 0.5 ) {
+      this.jump();
     }
 
   }

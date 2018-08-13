@@ -1,9 +1,15 @@
-var bird;
+const population = 1;
+var birds = [];
+var deadBirds = [];
 var pipes = [];
 
 function setup() {
   createCanvas(640, 480);
-  bird = new Bird();
+
+  for(var i=0; i < population; i++) {
+    birds[i] = new Bird();
+  }
+
   pipes.push(new Pipe());
   prediction = [0,0];
 }
@@ -11,10 +17,15 @@ function setup() {
 function draw() {
   background(0);
 
+  for(let bird of birds) {
+    bird.update();
+    bird.show();
+    bird.flywithAI(pipes);
+  }
 
-  bird.update();
-  bird.show();
-  bird.flywithAI(pipes);
+  if(birds.length === 0){
+    nextGeneration();
+  }
 
   if(frameCount % 80 == 0) {
     pipes.push(new Pipe());
@@ -24,8 +35,10 @@ function draw() {
       pipes[i].update();
       pipes[i].show();
 
-      if(pipes[i].hitBird(bird)){
-        bird.die();
+      for(var j=birds.length-1; j >= 0; j--) {
+        if(pipes[i].hitBird(birds[j])) {
+          deadBirds.push(birds.splice(j, 1)[0]);
+        }
       }
 
       if(pipes[i].offScreen()) {
