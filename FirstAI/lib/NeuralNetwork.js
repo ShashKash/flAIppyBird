@@ -20,23 +20,27 @@ function NeuralNetwok() {
   //   }
   // }
 
-  const model = tf.sequential();
+  this.model = tf.sequential();
 
   this.initializeLayers = function() {
-    model.add(tf.layers.dense({
+    this.model.add(tf.layers.dense({
       inputShape: [this.inputNodes],
       activation: "sigmoid",
       units: 5,
       kernelInitializer: 'randomNormal',
       biasInitializer: 'randomNormal',
     }))
-    model.add(tf.layers.dense({
+    this.model.add(tf.layers.dense({
       inputShape: [4],
       activation: "sigmoid",
       units: this.outputNodes,
       kernelInitializer: 'randomNormal',
       biasInitializer: 'randomNormal'
     }))
+
+    //print( model.getWeights()[0].dataSync() );
+
+    //const savedModel = await model.save('downloads://my-model');
     //print(model.getWeights()[0].data().toString());
     //print(model);
   }
@@ -44,7 +48,7 @@ function NeuralNetwok() {
   this.forward = function(inputs) {
     const inputData = tf.tensor2d(inputs, [1,this.inputNodes]);
     //model.predict(inputData).print();
-    const output = model.predict(inputData).dataSync();
+    const output = this.model.predict(inputData).dataSync();
 
     //Add normalization to the output.
     var jumpPrediction = output[0]/(output[0] + output[1]);
@@ -58,12 +62,26 @@ function NeuralNetwok() {
   }
 
   //Copy the neural net
-  this.copy = function() {
-
-  }
 
   //mutate the model a liitle bit
   this.mutateModel = function() {
 
+    var weights = [this.model.getWeights()[0].dataSync(), this.model.getWeights()[1].dataSync(), this.model.getWeights()[2].dataSync(), this.model.getWeights()[3].dataSync()];
+    var new_weights = [];
+
+    for(var j=0; j < weights.length; j++) {
+      for(var i=0;i < weights[0].length; i++) {
+        weights[j][i] = randomGaussian(weights[j][i], 0.05);
+      }
+    }
+
+    new_weights.push(tf.tensor(weights[0]).reshape([5,5]));
+    new_weights.push(tf.tensor(weights[1]).reshape([5]));
+    new_weights.push(tf.tensor(weights[2]).reshape([5,2]));
+    new_weights.push(tf.tensor(weights[3]).reshape([2]));
+
+    this.model.setWeights(new_weights);
+
   }
+
 }

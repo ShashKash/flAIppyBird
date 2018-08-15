@@ -1,6 +1,6 @@
 function Pipe() {
   this.HoleUp = random(height/2);
-  this.HoleDown = height - this.HoleUp - random(100,150);//From the bottom of the Canvas
+  this.HoleDown = height - this.HoleUp - 250;//From the bottom of the Canvas
   this.HoleSize = (height-this.HoleDown) - this.HoleUp;
 
   this.width = 50;
@@ -25,7 +25,7 @@ function Pipe() {
 
   this.hitBird = function(bird) {
     if( ( bird.y > height- this.HoleDown || bird.y < this.HoleUp)) {
-      if( this.x < bird.x && this.x+this.width > bird.x){
+      if( this.x - bird.x == 20){
       return true;
       }
     }

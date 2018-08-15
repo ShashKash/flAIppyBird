@@ -1,12 +1,19 @@
-function Bird() {
+function Bird(brain) {
   this.y = height/2;
   this.x = 50;
 
   this.gravity = 0.5;
   this.velocity = 0;
 
-  this.brain = new NeuralNetwok(3,5,2);
-  this.brain.initializeLayers();
+  if(brain == null) {
+    this.brain = new NeuralNetwok(3,5,2);
+    this.brain.initializeLayers();
+  }else {
+      this.brain = brain;
+      if(random(0,1) < mutationRateBird) {
+        this.brain.mutateModel();
+      }
+    }
 
   this.score = 0;
   this.fitness = 0;
@@ -37,10 +44,6 @@ function Bird() {
 
   this.jump = function() {
     this.velocity += -15;
-  }
-
-  this.die = function() {
-    noLoop();
   }
 
   this.nearestPipe = function(pipes) {

@@ -1,7 +1,9 @@
-const population = 1;
+const population = 10;
+const mutationRateBird = 0.2;
 var birds = [];
 var deadBirds = [];
 var pipes = [];
+var bestestFitBird;
 
 function setup() {
   createCanvas(640, 480);
@@ -10,8 +12,11 @@ function setup() {
     birds[i] = new Bird();
   }
 
+  bestestFitBird = new Bird();
   pipes.push(new Pipe());
   prediction = [0,0];
+
+  frameRate(50);
 }
 
 function draw() {
@@ -24,7 +29,7 @@ function draw() {
   }
 
   if(birds.length === 0){
-    nextGeneration();
+    nextGeneration(deadBirds);
   }
 
   if(frameCount % 80 == 0) {
